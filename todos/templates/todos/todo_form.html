@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="form-container">
+    <h2>
+        {% if object %}
+        <i class="ph ph-pencil-simple" style="color: var(--primary-color);"></i> Edit Task
+        {% else %}
+        <i class="ph ph-plus-circle" style="color: var(--primary-color);"></i> New Task
+        {% endif %}
+    </h2>
+    <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="form-group">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}
+            <div class="error-message" style="color: var(--danger-color); font-size: 0.875rem; margin-top: 0.25rem;">
+                {{ field.errors }}
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+        <div class="form-actions">
+            <a href="{% url 'todo_list' %}" class="btn btn-outline">Cancel</a>
+            <button type="submit" class="btn btn-primary">
+                <i class="ph ph-floppy-disk"></i> Save Task
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

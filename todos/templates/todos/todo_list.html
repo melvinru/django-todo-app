@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="todo-section">
+    <h2>Active Tasks</h2>
+    {% if active_todos %}
+    <ul class="todo-list">
+        {% for todo in active_todos %}
+        <li class="todo-item">
+            <div class="todo-content">
+                <div class="meta-info">
+                    {% if todo.due_date %}
+                    <span class="due-date">
+                        <i class="ph ph-calendar-blank"></i>
+                        {{ todo.due_date|date:"M d, Y H:i" }}
+                    </span>
+                    {% endif %}
+                </div>
+                <h3>{{ todo.title }}</h3>
+                {% if todo.description %}
+                <p>{{ todo.description }}</p>
+                {% endif %}
+            </div>
+            <div class="todo-actions">
+                <a href="{% url 'todo_toggle' todo.pk %}" class="btn btn-sm btn-success" title="Mark as Resolved">
+                    <i class="ph ph-check-bold"></i>
+                    <span>Done</span>
+                </a>
+                <a href="{% url 'todo_update' todo.pk %}" class="btn btn-sm btn-outline btn-icon-only" title="Edit">
+                    <i class="ph ph-pencil-simple"></i>
+                </a>
+                <a href="{% url 'todo_delete' todo.pk %}" class="btn btn-sm btn-danger btn-icon-only" title="Delete">
+                    <i class="ph ph-trash"></i>
+                </a>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <div class="empty-state">
+        <i class="ph ph-clipboard-text"></i>
+        <p>No active tasks. Time to relax or add a new one!</p>
+    </div>
+    {% endif %}
+</div>
+
+<div class="todo-section resolved-section">
+    <h2>Resolved Tasks</h2>
+    {% if resolved_todos %}
+    <ul class="todo-list">
+        {% for todo in resolved_todos %}
+        <li class="todo-item resolved">
+            <div class="todo-content">
+                <h3>{{ todo.title }}</h3>
+                <span class="badge badge-resolved">
+                    <i class="ph ph-check-circle"></i> Resolved
+                </span>
+            </div>
+            <div class="todo-actions">
+                <a href="{% url 'todo_toggle' todo.pk %}" class="btn btn-sm btn-outline" title="Undo">
+                    <i class="ph ph-arrow-u-up-left"></i>
+                </a>
+                <a href="{% url 'todo_delete' todo.pk %}" class="btn btn-sm btn-danger btn-icon-only" title="Delete">
+                    <i class="ph ph-trash"></i>
+                </a>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p class="empty-state" style="padding: 2rem;">No resolved tasks yet.</p>
+    {% endif %}
+</div>
+{% endblock %}
